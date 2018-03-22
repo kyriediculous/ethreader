@@ -1,6 +1,6 @@
 # ethreader
 
-> Decentralized e-book platform
+> Decentralized e-book platform (hobby project)
 
 ## Build Setup
 
