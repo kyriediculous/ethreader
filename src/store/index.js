@@ -11,9 +11,6 @@ export const store = new Vuex.Store({
   strict: true,
   state,
   mutations: {
-    saveBuffer (state, payload) {
-      state.fileBuffer = payload
-    },
     registerContract (state, payload) {
       state.contractInstance = payload
     },
@@ -29,10 +26,6 @@ export const store = new Vuex.Store({
    }
   },
   actions: {
-    loadBuffer ({commit}, payload) {
-      let buffer = Buffer.from(payload.result)
-      commit('saveBuffer', buffer)
-    },
     fetchContract ({commit}) {
       getContract
         .then(r => commit('registerContract', r))

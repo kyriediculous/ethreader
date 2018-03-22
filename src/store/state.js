@@ -7,8 +7,7 @@ let state = {
     balance: null,
     error: null
   },
-  contractInstance: null,
-  fileBuffer: null
+  contractInstance: null
 }
 
 export default state

@@ -1,43 +1,61 @@
 <template>
   <div id="upload">
-    <h3>Upload book (pdf)</h3>
+    <h3>Upload book</h3>
     <form v-on:submit.prevent="submitFile">
-      <input v-on:change="captureFile" type="file" placeholder="Select file..."/>
-      <input v-model="title" name="title" placeholder="Enter title">
-      <button type="submit">Upload</button>
+      <label for="book">Choose pdf file to upload</label>
+      <input id="fileBuffer" v-on:change="captureFile" type="file"/><br />
+      <label for="thumbnail">Choose cover</label>
+      <input id="thumbBuffer" v-on:change="captureFile" type="file" accept="image/*"><br />
+      <button type="submit">Upload</button><br />
+      <label for="">Title</label>
+      <input id="title" v-model="title" name="title" placeholder="Enter title">
+      <p>
+        {{bookHash}}
+        {{thumbHash}}
+      </p>
     </form>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import ipfs from '../util/ipfs'
+import {addBook} from '../util/contractMethods'
 export default {
   name: 'upload',
   data () {
     return {
-      ipfsHash: '',
-      thumbHash: '',
-      title: ''
+      fileBuffer: null,
+      thumbBuffer: null,
+      bookHash: null,
+      thumbHash: null,
+      title: null
     }
   },
-  computed: {
-    filebuffer () {
-      return this.$store.state.fileBuffer
-    }
-  },
+  computed: mapState({
+    coinbase: state => state.web3.coinbase
+  }),
   methods: {
     captureFile (event) {
-      let file = event.target.files[0]
       let reader = new window.FileReader()
-      reader.readAsArrayBuffer(file)
-      reader.onloadend = () => {this.$store.dispatch('loadBuffer', reader)}
+      reader.readAsArrayBuffer(event.target.files[0])
+      reader.onloadend = () => {
+        this[event.srcElement.id] = Buffer.from(reader.result)
+      }
     },
     submitFile (event) {
-      ipfs.add(this.$store.state.fileBuffer)
+      ipfs.add(this.fileBuffer)
         .then(r => {
           let ipfsHash = r[0].hash
-          this.ipfsHash = ipfsHash
+          this.bookHash = ipfsHash
+          return ipfs.add(this.thumbBuffer)
+        }).then(r => {
+          let ipfsHash = r[0].hash
+          this.thumbHash = ipfsHash
+          console.log(this.coinbase)
+          return addBook(this.bookHash, this.thumbHash, this.title, this.coinbase, this.$store.state.contractInstance)
         })
+        .then(r => console.log(r))
         .catch(e => console.log(e))
     }
   }
@@ -45,5 +63,4 @@ export default {
 </script>
 
 <style>
-
 </style>
