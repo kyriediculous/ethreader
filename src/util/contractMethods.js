@@ -28,4 +28,17 @@ let byTitle = (title, from, contract) => {
 })
 }
 
-export {addBook, byTitle}
+let byAuthor = (author, from, contract) => {
+  return new Promise(function (resolve, reject) {
+    contract().getBooksByAuthor(author, {from: from}, (err, res) => {
+      if (err) {
+        reject(new Error('could not find books for author' + author))
+      } else {
+        console.log(res)
+        resolve(res)
+      }
+    })
+  })
+}
+
+export {addBook, byTitle, byAuthor}
