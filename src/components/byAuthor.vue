@@ -18,7 +18,7 @@ export default {
  methods: {
    search () {
      console.log(this.$store.state.web3.coinbase)
-     byTitle(this.bookAuthor, this.$store.state.web3.coinbase, this.$store.state.contractInstance).then(r => console.log(r)).catch(e => console.log(e))
+     byAuthor(this.bookAuthor, this.$store.state.web3.coinbase, this.$store.state.contractInstance).then(r => console.log(r)).catch(e => console.log(e))
    }
  }
 }
