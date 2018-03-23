@@ -36,6 +36,26 @@ let byAuthor = (author, from, contract) => {
       }
     })
   })
+  .then(res => {
+    return new Promise(function(resolve, reject) {
+      Promise.all(
+        res.map( (id) => {
+          return new Promise(function(resolve, reject) {
+            contract().contract.books(id, (err, res) => {
+              resolve({
+                author: res[0],
+                title: res[1],
+                bookHash: res[2],
+                thumbHash: res[3],
+                timestamp: res[4]
+              })
+            })
+          })
+        })
+      ).then(res => {resolve(res)})
+    })
+  })
 }
+
 
 export {addBook, byTitle, byAuthor}
