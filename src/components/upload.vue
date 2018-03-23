@@ -52,7 +52,6 @@ export default {
         }).then(r => {
           let ipfsHash = r[0].hash
           this.thumbHash = ipfsHash
-          console.log(this.coinbase)
           return addBook(this.bookHash, this.thumbHash, this.title, this.coinbase, this.$store.state.contractInstance)
         })
         .then(r => console.log(r))

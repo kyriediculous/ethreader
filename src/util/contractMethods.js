@@ -1,6 +1,5 @@
 let addBook = (book, thumb, title, from, contract) => {
   return new Promise(function (resolve, reject) {
-  console.log(book, title, thumb)
   contract().contract.addBook(book, title, thumb, {
     from: from
   },
@@ -21,7 +20,6 @@ let byTitle = (title, from, contract) => {
     if (err) {
       reject(new Error('could not find book with title' + title))
     } else {
-      console.log(res)
       resolve(res)
     }
   })
@@ -34,7 +32,6 @@ let byAuthor = (author, from, contract) => {
       if (err) {
         reject(new Error('could not find books for author' + author))
       } else {
-        console.log(res)
         resolve(res)
       }
     })
