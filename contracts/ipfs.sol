@@ -16,7 +16,7 @@ contract IPFS {
     mapping (address => uint) public OwnerBookCount;
 
     function addBook(string _bookHash, string _title, string _thumbHash) public {
-        uint id = books.push(Book(msg.sender, _bookHash, _title, _thumbHash, now))-1;
+        uint id = books.push(Book(msg.sender, _title, _bookHash, _thumbHash, now))-1;
         BookToOwner[id] = msg.sender;
         OwnerBookCount[msg.sender]++; ///CONVERT TO SAFEMATH
     }

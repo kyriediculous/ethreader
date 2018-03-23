@@ -5,6 +5,7 @@ import IPFS from '../../build/contracts/IPFS.json'
 let getContract = new Promise(function (resolve, reject) {
 
   let web3 = new Web3(window.web3.currentProvider)
+  console.log(web3)
   let myContract = contract(IPFS)
   myContract.setProvider(web3.currentProvider)
   console.log("getContract", web3.eth.accounts[0])
