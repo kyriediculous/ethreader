@@ -8,8 +8,15 @@
 # install dependencies
 npm install
 
+#Run ganache in directory of the AppImage(seperat terminal)
+./ganache.AppImage
+
+#compile and migrate
+truffle compile
+truffle migrate
+
 # serve with hot reload at localhost:8080
-npm run dev
+npm run dev OR npm start
 
 # build for production with minification
 npm run build
