@@ -15,11 +15,13 @@
 <script>
 import {newAuthor} from '../util/contractMethods'
 export default {
-  data () return {
+  data () {
+    return {
     firstName: null,
     lastName: null,
     email: null,
     registered: null
+    }
   },
   methods: {
     register () {
