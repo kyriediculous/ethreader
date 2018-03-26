@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import NewAuthor from '@/components/newAuthor'
 import ByTitle from '@/components/byTitle'
 import ByAuthor from '@/components/byAuthor'
 import Upload from '@/components/upload'
@@ -15,6 +16,7 @@ import HelloMetamask from '@/components/helloMetamask'
 export default {
   name: 'home',
   components: {
+    'new-author': NewAuthor,
     'by-title': ByTitle,
     'by-author': ByAuthor,
     'upload': Upload,
