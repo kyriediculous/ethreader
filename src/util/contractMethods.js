@@ -15,7 +15,6 @@ let addBook = (book, thumb, title, from, contract) => {
 
 let byTitle = (title, from, contract) => {
   return new Promise(function (resolve, reject) {
-    console.log(contract())
   contract().contract.getBookByTitle(title, {from: from}, (err, res) => {
     if (err) {
       reject(new Error('could not find book with title' + title))
@@ -37,13 +36,16 @@ let byAuthor = (author, from, contract) => {
     })
   })
   .then(res => {
+    let authorName = res[1];
+    let authorEmail = res[2]
     return new Promise(function(resolve, reject) {
       Promise.all(
-        res.map( (id) => {
+        res[0].map( (id) => {
           return new Promise(function(resolve, reject) {
             contract().contract.books(id, (err, res) => {
               resolve({
-                author: res[0],
+                authorName,
+                authorEmail,
                 title: res[1],
                 bookHash: res[2],
                 thumbHash: res[3],

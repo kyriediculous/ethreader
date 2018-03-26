@@ -6,7 +6,6 @@ contract IPFS is Authors{
 
    struct Book {
         address authorAddress;
-        Author authorName;
         string title;
         string bookHash; //ipfs book hash
         string thumbHash; //ipfs thumbnail hash
@@ -26,12 +25,12 @@ contract IPFS is Authors{
         if (!_bookExists(_bookHash)) {
             uint _timestamp = now;
             bytes32 _IPPR = keccak256(msg.sender, _title, authors[msg.sender].fullName);
-            uint id = books.push(Book(msg.sender, authors[msg.sender], _title, _bookHash, _thumbHash, _timestamp, _IPPR))-1;
+            uint id = books.push(Book(msg.sender, _title, _bookHash, _thumbHash, _timestamp, _IPPR))-1;
             BookToOwner[id] = msg.sender;
             OwnerBookCount[msg.sender]++; ///CONVERT TO SAFEMATH
             return true;
         } else {
-            return false;
+           return false;
         }
     }
 
@@ -55,8 +54,10 @@ contract IPFS is Authors{
         return result;
     }
 
-    function getBooksByAuthorName(string _author) external view returns (uint[]) {
-        return getBooksByAuthor(authorAddresses[keccak256(_author)]);
+    function getBooksByAuthorName(string _author) external view returns (uint[], string, string) {
+        address author = address(authorAddresses[keccak256(_author)]);
+        uint[] memory getBooks = getBooksByAuthor(author);
+        return(getBooks, authors[author].fullName, authors[author].email);
     }
 
     function getBookByTitle(string _title) external view returns (address author, string bookHash, string title, string thumbHash) {
