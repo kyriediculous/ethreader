@@ -15,6 +15,7 @@ contract Authors {
   }
 
   mapping (address => Author) public authors;
+  mapping(bytes32  => address) public authorAddresses;
 
   function newAuthor(string _firstName, string _lastName, string _email) external {
     authors[msg.sender].firstName = _firstName;
@@ -22,5 +23,6 @@ contract Authors {
     authors[msg.sender].fullName = _firstName.strConcat(_lastName, true);
     authors[msg.sender].email = _email;
     authors[msg.sender].registered = true;
+    authorAddresses[keccak256(_firstName.strConcat(_lastName, true))] = msg.sender;
   }
 }
