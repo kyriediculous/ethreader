@@ -28,7 +28,7 @@ let byTitle = (title, from, contract) => {
 
 let byAuthor = (author, from, contract) => {
   return new Promise(function (resolve, reject) {
-    contract().contract.getBooksByAuthor(author, {from: from}, (err, res) => {
+    contract().contract.getBooksByAuthorName(author, {from: from}, (err, res) => {
       if (err) {
         reject(new Error('could not find books for author' + author))
       } else {
