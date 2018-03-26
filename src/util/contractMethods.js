@@ -15,14 +15,33 @@ let addBook = (book, thumb, title, from, contract) => {
 
 let byTitle = (title, from, contract) => {
   return new Promise(function (resolve, reject) {
-  contract().contract.getBookByTitle(title, {from: from}, (err, res) => {
-    if (err) {
-      reject(new Error('could not find book with title' + title))
-    } else {
-      resolve(res)
-    }
+    contract().contract.getBookByTitle(title, {from: from}, (err, res) => {
+      if (err) {
+        reject(new Error('could not find book with title' + title))
+      } else {
+        resolve(res)
+      }
+    })
+  }).then(res => {
+    let bookHash = res[1]
+    let title = res[2]
+    let thumbnail = 'https://gateway.ipfs.io/ipfs/' + res[3]
+    return new Promise(function(resolve, reject) {
+      contract().contract.authors(res[0], (err, res) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve({
+            bookHash,
+            title,
+            thumbnail,
+            authorName: res[2],
+            authorEmail: res[3]
+          })
+        }
+      })
+    })
   })
-})
 }
 
 let byAuthor = (author, from, contract) => {
@@ -48,7 +67,7 @@ let byAuthor = (author, from, contract) => {
                 authorEmail,
                 title: res[1],
                 bookHash: res[2],
-                thumbHash: res[3],
+                thumbHash: 'https://gateway.ipfs.io/ipfs/' + res[3],
                 timestamp: res[4]
               })
             })
