@@ -5,7 +5,7 @@
     <input v-model="firstName" type="text" id="firstName" placeholder="First Name">
     <label for="lastName">Last Name</label>
     <input v-model="lastName" type="text" id="lastName" placeholder="Last Name">
-    <label for="email"></label>
+    <label for="email">E-mail</label>
     <input type="email" id="email" placeholder="smith@example.com">
     <button v-on:click="register" type="button" name="button">Register</button>
     {{ registered }}

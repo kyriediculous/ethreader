@@ -6,9 +6,9 @@
       <input id="fileBuffer" v-on:change="captureFile" type="file"/><br />
       <label for="thumbnail">Choose cover</label>
       <input id="thumbBuffer" v-on:change="captureFile" type="file" accept="image/*"><br />
-      <button type="submit">Upload</button><br />
       <label for="">Title</label>
       <input id="title" v-model="title" name="title" placeholder="Enter title">
+      <button type="submit">Upload</button>
       <p>
         {{bookHash}}
         {{thumbHash}}

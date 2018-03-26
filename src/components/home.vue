@@ -1,5 +1,6 @@
 <template>
   <div id="home">
+    <new-author/>
     <by-title/>
     <by-author/>
     <upload/>
