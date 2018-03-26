@@ -59,7 +59,7 @@ let byAuthor = (author, from, contract) => {
 
 let newAuthor = (firstName, lastName, email, from, contract) => {
   return new Promise(function(resolve, reject) {
-    contract().contract.newAuthor(firstName, lastName, email, {from: from}, (err, result) => {
+    contract().contract.newAuthor(firstName, lastName, email, {from: from}, (err, res) => {
       if (err) {
         reject(new Error('could not register', e))
       } else {

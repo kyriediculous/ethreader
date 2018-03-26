@@ -37,10 +37,11 @@ export default {
   }),
   methods: {
     captureFile (event) {
+      console.log(event.target.id)
       let reader = new window.FileReader()
       reader.readAsArrayBuffer(event.target.files[0])
       reader.onloadend = () => {
-        this[event.srcElement.id] = Buffer.from(reader.result)
+        this[event.target.id] = Buffer.from(reader.result)
       }
     },
     submitFile (event) {

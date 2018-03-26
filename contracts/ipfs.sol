@@ -1,6 +1,6 @@
 pragma solidity ^0.4.19;
 
-import 'browser/authors.sol';
+import './authors.sol';
 
 contract IPFS is Authors{
 

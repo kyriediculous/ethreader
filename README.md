@@ -8,6 +8,9 @@
 # install dependencies
 npm install
 
+#Install ganache (linux), make the AppImage executable
+chmod a+x ganache.AppImage
+
 #Run ganache in directory of the AppImage(seperat terminal)
 ./ganache.AppImage
 
