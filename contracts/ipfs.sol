@@ -24,7 +24,7 @@ contract IPFS is Authors{
         //Check if book exists on contract
         if (!_bookExists(_bookHash)) {
             uint _timestamp = now;
-            bytes32 _IPPR = keccak256(msg.sender, _title, authors[msg.sender].fullName);
+            bytes32 _IPPR = keccak256(msg.sender, _title, authors[msg.sender].name);
             uint id = books.push(Book(msg.sender, _title, _bookHash, _thumbHash, _timestamp, _IPPR))-1;
             BookToOwner[id] = msg.sender;
             OwnerBookCount[msg.sender]++; ///CONVERT TO SAFEMATH
@@ -57,7 +57,7 @@ contract IPFS is Authors{
     function getBooksByAuthorName(string _author) external view returns (uint[], string, string) {
         address author = address(authorAddresses[keccak256(_author)]);
         uint[] memory getBooks = getBooksByAuthor(author);
-        return(getBooks, authors[author].fullName, authors[author].email);
+        return(getBooks, authors[author].name, authors[author].email);
     }
 
     function getBookByTitle(string _title) external view returns (address author, string bookHash, string title, string thumbHash) {

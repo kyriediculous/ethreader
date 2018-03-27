@@ -7,9 +7,7 @@ contract Authors {
   using strings for string;
 
   struct Author {
-    string firstName;
-    string lastName;
-    string fullName;
+    string name;
     string email;
     bool registered;
   }
@@ -18,9 +16,7 @@ contract Authors {
   mapping(bytes32  => address) public authorAddresses;
 
   function newAuthor(string _firstName, string _lastName, string _email) external {
-    authors[msg.sender].firstName = _firstName;
-    authors[msg.sender].lastName = _lastName;
-    authors[msg.sender].fullName = _firstName.strConcat(_lastName, true);
+    authors[msg.sender].name = _firstName.strConcat(_lastName, true);
     authors[msg.sender].email = _email;
     authors[msg.sender].registered = true;
     authorAddresses[keccak256(_firstName.strConcat(_lastName, true))] = msg.sender;
