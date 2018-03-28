@@ -41,6 +41,28 @@ contract IPFS is Authors{
         }
         return false;
     }
+    //because function is called every time a book is added and we have to loop over all registered books?
+    //!!! use bytes32 for _bookHash param
+    function _bookExistsTMP(bytes32 _bookHash) internal view returns (bool _equal) {
+        bytes32 hash = keccak256(_bookHash);
+        bool equal;
+        for (uint i = 0; i < books.length; i++) {
+            bytes32 tmpHash = books[i].bookHash;
+            assembly {
+                //mstore(0x0, _bookHash)
+                //let hash := keccak256(0x0, 32)
+                mstore(0x1 , tmpHash)
+                let checkHash := keccak256(0x1, 32)
+
+                {
+                    if eq(checkHash, hash) { equal := 1 }
+                }
+            }
+        }
+        return equal;
+
+    }
+
 
     function getBooksByAuthor(address _author) internal view returns (uint[]) {
         uint[] memory result = new uint[](OwnerBookCount[_author]);
