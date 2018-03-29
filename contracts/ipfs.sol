@@ -22,7 +22,8 @@ contract IPFS is Authors{
         //Check if author is registered
         require(authors[msg.sender].registered);
         //Check if book exists on contract
-        if (!_bookExists(_bookHash)) {
+        //conversion to bytes32 for check
+        if (!_bookExistsTMP(stringToBytes32(_bookHash))) {
             uint _timestamp = now;
             bytes32 _IPPR = keccak256(msg.sender, _title, authors[msg.sender].name);
             uint id = books.push(Book(msg.sender, _title, _bookHash, _thumbHash, _timestamp, _IPPR))-1;
@@ -47,7 +48,7 @@ contract IPFS is Authors{
         bytes32 hash = keccak256(_bookHash);
         bool equal;
         for (uint i = 0; i < books.length; i++) {
-            bytes32 tmpHash = books[i].bookHash;
+            bytes32 tmpHash = stringToBytes32(books[i].bookHash);
             assembly {
                 //mstore(0x0, _bookHash)
                 //let hash := keccak256(0x0, 32)
@@ -60,6 +61,18 @@ contract IPFS is Authors{
             }
         }
         return equal;
+
+    }
+
+    function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+
+        assembly {
+            result := mload(add(source, 32))
+        }
 
     }
 
