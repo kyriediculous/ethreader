@@ -1,8 +1,9 @@
 pragma solidity ^0.4.19;
 
 import './libraries/strings.sol';
+import "contractmanagerEnabled.sol";
 
-contract Authors {
+contract Authors is ContractManagerEnabled {
 
   using strings for string;
 

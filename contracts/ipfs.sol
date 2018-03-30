@@ -2,7 +2,7 @@ pragma solidity ^0.4.19;
 
 import './authors.sol';
 
-contract IPFS is Authors{
+contract IPFS is Authors {
 
    struct Book {
         address authorAddress;
