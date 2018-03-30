@@ -35,8 +35,8 @@ let byTitle = (title, from, contract) => {
             bookHash,
             title,
             thumbnail,
-            authorName: res[2],
-            authorEmail: res[3]
+            authorName: res[0],
+            authorEmail: res[1]
           })
         }
       })

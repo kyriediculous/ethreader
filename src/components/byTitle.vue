@@ -1,15 +1,44 @@
 <template>
-  <div id="byTitle">
-    <h3>Search books by title</h3>
-    <input v-model='bookTitle' type="text" name="byTitle" placeholder='Enter title...'>
-    <button v-on:click="search" type="button" name="button">Search</button>
-    <div class="book" v-if="fetchBook.bookHash">
-      <h3>{{fetchBook.title}}</h3>
-      <img width="150" height="100" :src="fetchBook.thumbHash" alt="book cover">
-      <p><strong>{{fetchBook.authorName}}</strong></p>
-      <p>{{fetchBook.authorEmail}}</p>
-    </div>
-  </div>
+  <v-container d-block fill-height>
+    <v-layout align-center justify-center>
+      <v-flex xs12 sm8 md4>
+        <v-card class="elevation-12">
+          <v-toolbar dark color="primary-gradient">
+            <v-toolbar-title>Search By Title</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form>
+              <v-text-field color="black" v-model="bookTitle" prepend-icon="search" label="Title" type="text"></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn v-on:click="search" dark color="primary-gradient">Search</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout v-if="fetchBook.bookHash" class="my-2" align-center justify-center>
+      <v-flex xs12 sm8 md6>
+        <v-card light hover>
+          <v-container fluid grid-list-lg>
+            <v-layout row>
+              <v-flex xs7>
+                <div>
+                  <div class="headline">{{fetchBook.title}}</div>
+                  <div>{{fetchBook.authorName}}</div>
+                  <div>{{fetchBook.authorEmail}}</div>
+                </div>
+              </v-flex>
+              <v-flex xs5>
+                <v-card-media :src="fetchBook.thumbHash" height="125px" contain></v-card-media>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -44,10 +73,5 @@ export default {
 </script>
 
 <style>
-.book {
-  padding: 15px;
-  border: 1px solid #f5f5f5;
-  box-shadow: 0 19px 38px rgba(0,0,0,0.22), 0 15px 12px rgba(0,0,0,0.11);
-  border-radius:5px;
-}
+
 </style>
