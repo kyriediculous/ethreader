@@ -1,3 +1,7 @@
+import {store} from '@/store/index'
+const web3Instance = store.state.web3.web3Instance
+const convertHex = (input) => web3Instance().toAscii(input).replace(/\u0000/g, '')
+
 let addBook = (book, thumb, title, from, contract) => {
   return new Promise(function (resolve, reject) {
   contract().contract.addBook(book, title, thumb, {
@@ -15,19 +19,23 @@ let addBook = (book, thumb, title, from, contract) => {
 
 let byTitle = (title, from, contract) => {
   return new Promise(function (resolve, reject) {
-    contract().contract.getBookByTitle(title, {from: from}, (err, res) => {
+    contract().contract.getBookByTitle(title, (err, res) => {
       if (err) {
         reject(new Error('could not find book with title' + title))
       } else {
+        console.log(res)
         resolve(res)
       }
     })
   }).then(res => {
-    let bookHash = res[1]
-    let title = res[2]
-    let thumbnail = 'https://gateway.ipfs.io/ipfs/' + res[3]
+    console.log(convertHex(res[0]), convertHex(res[1]))
+    let bookHash = convertHex(res[0])
+    let thumbnail = 'https://gateway.ipfs.io/ipfs/' + convertHex(res[1])
+    let title = convertHex(res[2])
+    let author = res[3]
+    let IPPR = res[4]
     return new Promise(function(resolve, reject) {
-      contract().contract.authors(res[0], (err, res) => {
+      contract().contract.authorByAddress(res[3], (err, res) => {
         if (err) {
           reject(new Error(err))
         } else {
@@ -35,8 +43,8 @@ let byTitle = (title, from, contract) => {
             bookHash,
             title,
             thumbnail,
-            authorName: res[0],
-            authorEmail: res[1]
+            authorName: convertHex(res[0]),
+            authorEmail: convertHex(res[1])
           })
         }
       })
@@ -46,29 +54,30 @@ let byTitle = (title, from, contract) => {
 
 let byAuthor = (author, from, contract) => {
   return new Promise(function (resolve, reject) {
-    contract().contract.getBooksByAuthorName(author, {from: from}, (err, res) => {
+    contract().contract.getBooksByAuthor(author, {from: from}, (err, res) => {
       if (err) {
         reject(new Error('could not find books for author' + author))
       } else {
+        console.log(res)
         resolve(res)
       }
     })
   })
   .then(res => {
-    let authorName = res[1];
-    let authorEmail = res[2]
+    let authorName = convertHex(res[1])
+    let authorEmail = convertHex(res[2])
     return new Promise(function(resolve, reject) {
       Promise.all(
         res[0].map( (id) => {
           return new Promise(function(resolve, reject) {
-            contract().contract.books(id, (err, res) => {
+            contract().contract.getBookById(id, (err, res) => {
               resolve({
                 authorName,
                 authorEmail,
-                title: res[1],
-                bookHash: res[2],
-                thumbHash: 'https://gateway.ipfs.io/ipfs/' + res[3],
-                timestamp: res[4]
+                title: convertHex(res[1]),
+                bookHash: convertHex(res[2]),
+                thumbHash: 'https://gateway.ipfs.io/ipfs/' + convertHex(res[3]),
+                IPPR: res[4]
               })
             })
           })
@@ -79,8 +88,9 @@ let byAuthor = (author, from, contract) => {
 }
 
 let newAuthor = (firstName, lastName, email, from, contract) => {
+  let name = firstName + " " + lastName
   return new Promise(function(resolve, reject) {
-    contract().contract.newAuthor(firstName, lastName, email, {from: from}, (err, res) => {
+    contract().contract.newAuthor(name, email, {from: from}, (err, res) => {
       if (err) {
         reject(new Error('could not register', e))
       } else {

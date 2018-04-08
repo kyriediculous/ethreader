@@ -1,10 +1,10 @@
 import Web3 from 'web3'
 import contract from 'truffle-contract'
-import IPFS from '../../build/contracts/IPFS.json'
+import UserEntry from '../../build/contracts/UserEntry'
 
 let getContract = new Promise(function (resolve, reject) {
   let web3 = new Web3(window.web3.currentProvider)
-  let myContract = contract(IPFS)
+  let myContract = contract(UserEntry)
   myContract.setProvider(web3.currentProvider)
   myContract.defaults({from: web3.eth.accounts[0]})
   myContract.deployed().then(result => {
