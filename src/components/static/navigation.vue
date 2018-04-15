@@ -19,7 +19,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed dark class="elevation-0 transparent">
+    <v-toolbar id="navbar" v-scroll="changeColor" fixed dark class="elevation-0 transparent">
       <v-toolbar-side-icon @click.stop="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">EthReader</router-link>
@@ -58,6 +58,17 @@ export default {
             {icon:'search', title:'By Title', link:'/byTitle'}
 
         ]
+    }
+  },
+  methods: {
+    changeColor () {
+      let navbar = document.getElementById('navbar')
+      navbar.classList.remove('transparent')
+      navbar.classList.add("primary-gradient")
+      if (navbar.pageYOffset == 0) {
+        navbar.classList.add("transparent")
+        navarb.classList.remove('primary-gradient')
+      }
     }
   }
 }

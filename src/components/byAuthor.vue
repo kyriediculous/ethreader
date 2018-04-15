@@ -19,7 +19,8 @@
       </v-flex>
     </v-layout>
     <v-layout v-if="fetchBooks" row align-center justify-center>
-      <v-flex class="my-2" xs12 sm8 md6>
+      <v-alert :value="fetchBooks.length == 0" type="info">No results found...</v-alert>
+      <v-flex v-if="fetchBooks.length > 0" class="my-2" xs12 sm8 md6>
         <v-card>
           <v-container fluid style="min-height: 0; max-height:40vh; overflow:auto;" grid-list-lg>
             <v-layout row wrap>
@@ -33,6 +34,8 @@
                             <div class="headline">{{book.title}}</div>
                             <div>{{book.authorName}}</div>
                             <div>{{book.authorEmail}}</div>
+                            <div>{{book.IPPR}}</div>
+                            <div>{{book.timestamp}}</div>
                           </div>
                         </v-flex>
                         <v-flex xs5>
@@ -83,16 +86,3 @@ export default {
   border-radius:5px;
 }
 </style>
-
-<!--
-<div class="book-grid">
-  <template v-for="book in fetchBooks">
-    <div class="book">
-      <h3>{{book.title}}</h3>
-      <img width="150" height="100" :src="book.thumbHash" alt="book cover">
-      <p><strong>{{book.authorName}}</strong></p>
-      <p>{{book.authorEmail}}</p>
-    </div>
-  </template>
-</div>
--->

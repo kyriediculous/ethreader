@@ -18,8 +18,9 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-layout v-if="fetchBook.bookHash" class="my-2" align-center justify-center>
-      <v-flex xs12 sm8 md6>
+    <v-layout class="my-2" align-center justify-center>
+      <v-alert :value="fetchBook.bookHash == false" type="info">No results found...</v-alert>
+      <v-flex v-if="fetchBook.bookHash" xs12 sm8 md6>
         <v-card light hover>
           <v-container fluid grid-list-lg>
             <v-layout row>
@@ -28,6 +29,8 @@
                   <div class="headline">{{fetchBook.title}}</div>
                   <div>{{fetchBook.authorName}}</div>
                   <div>{{fetchBook.authorEmail}}</div>
+                  <div>{{fetchBook.IPPR}}</div>
+                  <div>{{fetchBook.timestamp}}</div>
                 </div>
               </v-flex>
               <v-flex xs5>
@@ -53,7 +56,9 @@ export default {
        authorEmail: null,
        bookHash: null,
        title: null,
-       thumbHash: null
+       thumbHash: null,
+       timestamp: null,
+       IPPR: null
      }
    }
  },
@@ -61,11 +66,14 @@ export default {
    search () {
      byTitle(this.bookTitle, this.$store.state.web3.coinbase, this.$store.state.contractInstance)
       .then(r => {
+        console.log(r.bookhash)
         this.fetchBook.authorName = r.authorName,
         this.fetchBook.authorEmail = r.authorEmail,
         this.fetchBook.bookHash = r.bookHash
         this.fetchBook.title = r.title
         this.fetchBook.thumbHash = r.thumbnail
+        this.fetchBook.timestamp = new Date(parseInt(r.timestamp+'000', 10)),
+        this.fetchBook.IPPR = r.IPPR
       }).catch(e => console.log(e))
    }
  }

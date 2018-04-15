@@ -12,10 +12,13 @@
                   <v-text-field required color="black" v-model="lastName" prepend-icon="account_box" label="Last Name" type="text"></v-text-field>
                   <v-text-field required color="black" v-model="email" prepend-icon="email" label="E-mail" type="email"></v-text-field>
                 </v-form>
+                <v-alert type="success" :value="success">Registration succesful.</v-alert>
+                <v-alert type="error" :value="error">{{error}}</v-alert>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn v-on:click="register" dark color="primary-gradient">Register</v-btn>
+                <v-progress-circular v-if="inProgress" indeterminate color="purple"></v-progress-circular>
+                <v-btn v-if="inProgress === false" v-on:click="register" dark color="primary-gradient">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -31,14 +34,28 @@ export default {
     firstName: null,
     lastName: null,
     email: null,
-    registered: null
+    registered: null,
+    inProgress: false,
+    success: false,
+    error: false
     }
   },
   methods: {
     register () {
+      this.inProgress = true
+      this.success = false
+      this.error = false
       newAuthor(this.firstName, this.lastName, this.email, this.$store.state.web3.coinbase, this.$store.state.contractInstance)
-        .then(r => this.registered = true).catch(e => {
-          console.log(e)
+        .then(r => {
+          this.inProgress = false
+          if (r == "0x00") {
+            this.error = "Registration failed (Author already exists by name or address)."
+          } else if (r == "0x01") {
+            this.success = true
+          }
+        }).catch(e => {
+            this.inProgress = false
+            this.error = "Transaction failed, please try increasing gas amount."
         })
     }
   }

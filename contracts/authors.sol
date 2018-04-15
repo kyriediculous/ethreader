@@ -1,10 +1,6 @@
 pragma solidity ^0.4.19;
 
-import './libraries/strings.sol';
-
 contract Authors {
-
-  using strings for string;
 
   struct Author {
     string name;
@@ -15,10 +11,12 @@ contract Authors {
   mapping (address => Author) public authors;
   mapping(bytes32  => address) public authorAddresses;
 
-  function newAuthor(string _firstName, string _lastName, string _email) external {
-    authors[msg.sender].name = _firstName.strConcat(_lastName, true);
+  function newAuthor(string _name, string _email) external {
+    require(!authors[msg.sender].registered);
+    require(authorAddresses[keccak256(_name)] == 0x0);
+    authors[msg.sender].name = _name;
     authors[msg.sender].email = _email;
     authors[msg.sender].registered = true;
-    authorAddresses[keccak256(_firstName.strConcat(_lastName, true))] = msg.sender;
+    authorAddresses[keccak256(_name)] = msg.sender;
   }
 }

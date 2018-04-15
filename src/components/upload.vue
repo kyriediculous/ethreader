@@ -14,10 +14,13 @@
                   <input id="thumbBuffer" required type="file" accept="image/*" style="display: none" ref="thumbFile" @change="captureFile">
                   <v-text-field required color="black" v-model="title" prepend-icon="create" label="Title"></v-text-field>
                 </v-form>
+                <v-alert type="success" :value="success">Upload succesful.</v-alert>
+                <v-alert type="error" :value="error">Upload failed: <span>{{error}}</span></v-alert>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn v-on:click.prevent="submitFile" dark color="primary-gradient">Upload</v-btn>
+                <v-progress-circular v-if="inProgress" indeterminate color="purple"></v-progress-circular>
+                <v-btn v-if="inProgress === false" v-on:click.prevent="submitFile" dark color="primary-gradient">Upload</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -39,7 +42,10 @@ export default {
       thumbName: null,
       bookHash: null,
       thumbHash: null,
-      title: null
+      title: null,
+      inProgress: false,
+      success: false,
+      error: false
     }
   },
   computed: mapState({
@@ -65,7 +71,7 @@ export default {
       }
     },
     submitFile (event) {
-      console.log(this.thumbBuffer)
+      this.inProgress=true
       ipfs.add(this.fileBuffer)
         .then(r => {
           let ipfsHash = r[0].hash
@@ -74,10 +80,20 @@ export default {
         }).then(r => {
           let ipfsHash = r[0].hash
           this.thumbHash = ipfsHash
+          console.log(this.bookHash, this.thumbHash, this.title)
           return addBook(this.bookHash, this.thumbHash, this.title, this.coinbase, this.$store.state.contractInstance)
         })
-        .then(r => console.log(r))
-        .catch(e => console.log(e))
+        .then(r => {
+          this.inProgress = false
+          if (r == "0x00") {
+            this.error = "Content already exists on the network."
+          } else if (r == "0x01") {
+            this.success = true
+          }
+        }).catch(e => {
+          this.error = e.message
+          this.inProgress = false
+        })
     }
   }
 }
